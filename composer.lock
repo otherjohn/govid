@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "bllim/datatables",
-            "version": "v1.3.5",
+            "version": "v1.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bllim/laravel4-datatables-package.git",
-                "reference": "b48ed29ea95a6739abb85b2ae36d4497e14ab775"
+                "reference": "485c1e0c073ede16383eb6f1e64c93cb9d89b8dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bllim/laravel4-datatables-package/zipball/b48ed29ea95a6739abb85b2ae36d4497e14ab775",
-                "reference": "b48ed29ea95a6739abb85b2ae36d4497e14ab775",
+                "url": "https://api.github.com/repos/bllim/laravel4-datatables-package/zipball/485c1e0c073ede16383eb6f1e64c93cb9d89b8dd",
+                "reference": "485c1e0c073ede16383eb6f1e64c93cb9d89b8dd",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,7 @@
                 "laravel",
                 "laravel4"
             ],
-            "time": "2014-04-04 15:56:42"
+            "time": "2014-07-25 08:06:47"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -458,16 +458,16 @@
         },
         {
             "name": "league/oauth2-server",
-            "version": "3.2.2",
+            "version": "3.2.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-server.git",
-                "reference": "9658aa80ba26a0a5a7ac399d340e240de81814c2"
+                "reference": "2f14f6b3919029a14b2f09641fa757c1a566a2da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/9658aa80ba26a0a5a7ac399d340e240de81814c2",
-                "reference": "9658aa80ba26a0a5a7ac399d340e240de81814c2",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/2f14f6b3919029a14b2f09641fa757c1a566a2da",
+                "reference": "2f14f6b3919029a14b2f09641fa757c1a566a2da",
                 "shasum": ""
             },
             "require": {
@@ -494,7 +494,7 @@
                 {
                     "name": "Alex Bilbie",
                     "email": "hello@alexbilbie.com",
-                    "homepage": "http://www.httpster.org",
+                    "homepage": "http://www.alexbilbie.com",
                     "role": "Developer"
                 }
             ],
@@ -511,7 +511,7 @@
                 "secure",
                 "server"
             ],
-            "time": "2014-07-15 14:50:11"
+            "time": "2014-07-23 15:13:50"
         },
         {
             "name": "monolog/monolog",
@@ -629,19 +629,20 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v0.9.4",
+            "version": "v0.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "1e5e280ae88a27effa2ae4aa2bd088494ed8594f"
+                "reference": "ef70767475434bdb3615b43c327e2cae17ef12eb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/1e5e280ae88a27effa2ae4aa2bd088494ed8594f",
-                "reference": "1e5e280ae88a27effa2ae4aa2bd088494ed8594f",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/ef70767475434bdb3615b43c327e2cae17ef12eb",
+                "reference": "ef70767475434bdb3615b43c327e2cae17ef12eb",
                 "shasum": ""
             },
             "require": {
+                "ext-tokenizer": "*",
                 "php": ">=5.2"
             },
             "type": "library",
@@ -669,7 +670,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2013-08-25 17:11:40"
+            "time": "2014-07-23 18:24:17"
         },
         {
             "name": "patchwork/utf8",

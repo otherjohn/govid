@@ -154,7 +154,7 @@ class UserController extends BaseController {
     {
         $user = Auth::user();
         if(!empty($user->id)){
-            return Redirect::to('/');
+            return Redirect::to('/user');
         }
 
         return View::make('site/user/login');
@@ -179,7 +179,7 @@ class UserController extends BaseController {
         // Check that the user is confirmed.
         if ( Confide::logAttempt( $input, true ) )
         {
-            return Redirect::intended('/');
+            return Redirect::intended('/user');
         }
         else
         {

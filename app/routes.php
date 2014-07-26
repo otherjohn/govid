@@ -2,10 +2,10 @@
 
 /*
 |--------------------------------------------------------------------------
-| Application Routes
+| Clientlication Routes
 |--------------------------------------------------------------------------
 |
-| Here is where you can register all of the routes for an application.
+| Here is where you can register all of the routes for an clientlication.
 | It's a breeze. Simply tell Laravel the URIs it should respond to
 | and give it the Closure to execute when that URI is requested.
 |
@@ -16,16 +16,14 @@
  *  ------------------------------------------
  */
 Route::model('user', 'User');
-Route::model('comment', 'Comment');
-Route::model('post', 'Post');
+Route::model('client', 'Client');
 Route::model('role', 'Role');
 
 /** ------------------------------------------
  *  Route constraint patterns
  *  ------------------------------------------
  */
-Route::pattern('comment', '[0-9]+');
-Route::pattern('post', '[0-9]+');
+Route::pattern('client', '[0-9]+');
 Route::pattern('user', '[0-9]+');
 Route::pattern('role', '[0-9]+');
 Route::pattern('token', '[0-9a-z]+');
@@ -37,20 +35,13 @@ Route::pattern('token', '[0-9a-z]+');
 Route::group(array('prefix' => 'admin', 'before' => 'auth'), function()
 {
 
-    # Comment Management
-    Route::get('comments/{comment}/edit', 'AdminCommentsController@getEdit');
-    Route::post('comments/{comment}/edit', 'AdminCommentsController@postEdit');
-    Route::get('comments/{comment}/delete', 'AdminCommentsController@getDelete');
-    Route::post('comments/{comment}/delete', 'AdminCommentsController@postDelete');
-    Route::controller('comments', 'AdminCommentsController');
-
-    # Blog Management
-    Route::get('blogs/{post}/show', 'AdminBlogsController@getShow');
-    Route::get('blogs/{post}/edit', 'AdminBlogsController@getEdit');
-    Route::post('blogs/{post}/edit', 'AdminBlogsController@postEdit');
-    Route::get('blogs/{post}/delete', 'AdminBlogsController@getDelete');
-    Route::post('blogs/{post}/delete', 'AdminBlogsController@postDelete');
-    Route::controller('blogs', 'AdminBlogsController');
+    # Client Management
+    Route::get('clients/{client}/show', 'AdminClientsController@getShow');
+    Route::get('clients/{client}/edit', 'AdminClientsController@getEdit');
+    Route::post('clients/{client}/edit', 'AdminClientsController@postEdit');
+    Route::get('clients/{client}/delete', 'AdminClientsController@getDelete');
+    Route::post('clients/{client}/delete', 'AdminClientsController@postDelete');
+    Route::controller('clients', 'AdminClientsController');
 
     # User Management
     Route::get('users/{user}/show', 'AdminUsersController@getShow');
@@ -91,7 +82,7 @@ Route::post('user/login', 'UserController@postLogin');
 # User RESTful Routes (Login, Logout, Register, etc)
 Route::controller('user', 'UserController');
 
-//:: Application Routes ::
+//:: Clientlication Routes ::
 
 # Filter for detect language
 Route::when('contact-us','detectLang');
@@ -104,8 +95,8 @@ Route::get('contact-us', function()
 });
 
 # Posts - Second to last set, match slug
-Route::get('{postSlug}', 'BlogController@getView');
-Route::post('{postSlug}', 'BlogController@postView');
+Route::get('{postSlug}', 'ClientController@getView');
+Route::post('{postSlug}', 'ClientController@postView');
 
 # Index Page - Last route, no matches
-Route::get('/', array('before' => 'detectLang','uses' => 'BlogController@getIndex'));
+Route::get('/', array('before' => 'detectLang','uses' => 'ClientController@getIndex'));
