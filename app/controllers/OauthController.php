@@ -28,13 +28,12 @@ class OauthController extends BaseController {
 
 //Create your first route (for example “index” - which would resolve to /oauth).
 public function action_index(){
-
     try {
 
         // Tell the auth server to check the required parameters are in the
         //  query string
         $params = $this->authserver->getGrantType('authorization_code')->checkAuthoriseParams($this->request->get());
-        //var_dump($params);die();
+        
 
         // Save the verified parameters to the user's session
         Session::put('client_id', $params['client_id']);
@@ -42,6 +41,7 @@ public function action_index(){
         Session::put('redirect_uri', $params['redirect_uri']);
         Session::put('response_type', $params['response_type']);
         Session::put('scopes', $params['scopes']);
+        Session::put('state', $params['state']);
 
         
         // Redirect the user to the sign-in route
@@ -70,6 +70,7 @@ public function action_signin()
     $params['redirect_uri'] = Session::get('redirect_uri');
     $params['response_type'] = Session::get('response_type');
     $params['scopes'] = Session::get('scopes');
+    $params['state'] = Session::get('state');
 
     //var_dump($params);die();
 
@@ -138,6 +139,7 @@ public function action_authorise()
     $params['redirect_uri'] = Session::get('redirect_uri');
     $params['response_type'] = Session::get('response_type');
     $params['scopes'] = Session::get('scopes');
+    $params['state'] = Session::get('state');
 
     //dd($params);
 
@@ -198,6 +200,7 @@ public function action_authorise()
 //The final route to create is where the client exchanges the authorization code for an access token.
 public function action_access_token()
 {
+    
     try {
 
         // Tell the auth server to issue an access token
@@ -217,6 +220,7 @@ public function action_access_token()
         );
 
         // Set the correct header
+        dd($response);
         header($this->authserver->getExceptionHttpHeaders($this->authserver->getExceptionType($e->getCode())));
 
     } catch (Exception $e) {

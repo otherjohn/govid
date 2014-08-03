@@ -98,7 +98,7 @@ class AuthCode implements GrantTypeInterface {
         
         // Validate client ID and redirect URI
         $clientDetails = $this->authServer->getStorage('client')->getClient($authParams['client_id'], null, $authParams['redirect_uri'], $this->identifier);
-        //var_dump($clientDetails);die();
+        
 
         if ($clientDetails === false) {
             throw new Exception\ClientException($this->authServer->getExceptionMessage('invalid_client'), 8);
@@ -145,6 +145,7 @@ class AuthCode implements GrantTypeInterface {
             $authParams['scopes'][] = $scopeDetails;
         }
 
+        
         return $authParams;
     }
 
@@ -205,7 +206,7 @@ class AuthCode implements GrantTypeInterface {
 
         // Validate client ID and redirect URI
         $clientDetails = $this->authServer->getStorage('client')->getClient($authParams['client_id'], $authParams['client_secret'], $authParams['redirect_uri'], $this->identifier);
-        
+
 
         if ($clientDetails === false) {
             throw new Exception\ClientException($this->authServer->getExceptionMessage('invalid_client'), 8);
