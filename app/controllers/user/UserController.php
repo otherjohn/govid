@@ -38,7 +38,9 @@ class UserController extends BaseController {
      */
     public function postIndex()
     {
-        $this->user->username = Input::get( 'username' );
+        
+        //$this->user->terms = Input::get('terms');
+        $this->user->username = Input::get( 'email' );
         $this->user->email = Input::get( 'email' );
 
         $password = Input::get( 'password' );
@@ -88,15 +90,26 @@ class UserController extends BaseController {
      */
     public function postEdit($user)
     {
+
         // Validate the inputs
         $validator = Validator::make(Input::all(), $user->getUpdateRules());
-
+        //var_dump($user->getUpdateRules());die();
+        
 
         if ($validator->passes())
         {
             $oldUser = clone $user;
-            $user->username = Input::get( 'username' );
+            //$user->username = Input::get( 'username' );
             $user->email = Input::get( 'email' );
+            $user->first_name = Input::get( 'first_name' );
+            $user->last_name = Input::get( 'last_name' );
+            $user->street = Input::get( 'street' );
+            $user->city = Input::get( 'city' );
+            $user->state = Input::get( 'state' );
+            $user->zip = Input::get( 'zip' );
+            $user->phone = Input::get( 'phone' );
+            $user->mobile = Input::get( 'mobile' );
+    
 
             $password = Input::get( 'password' );
             $passwordConfirmation = Input::get( 'password_confirmation' );
@@ -126,6 +139,8 @@ class UserController extends BaseController {
         // Get validation errors (see Ardent package)
         $error = $user->errors()->all();
 
+        //var_dump($error);die();
+        
         if(empty($error)) {
             return Redirect::to('user')
                 ->with( 'success', Lang::get('user/user.user_account_updated') );
@@ -173,13 +188,16 @@ class UserController extends BaseController {
             'remember' => Input::get( 'remember' ),
         );
 
+        $path  = Input::get('oauth', '/user');
+
         // If you wish to only allow login from confirmed users, call logAttempt
         // with the second parameter as true.
         // logAttempt will check if the 'email' perhaps is the username.
         // Check that the user is confirmed.
         if ( Confide::logAttempt( $input, true ) )
         {
-            return Redirect::intended('/user');
+
+            return Redirect::intended($path);
         }
         else
         {

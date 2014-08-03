@@ -82,6 +82,48 @@ Route::post('user/login', 'UserController@postLogin');
 # User RESTful Routes (Login, Logout, Register, etc)
 Route::controller('user', 'UserController');
 
+
+/** ------------------------------------------
+ *  Oauth Routes
+ *  ------------------------------------------
+ *
+
+    oauth/index -> oauth/[controller@index]
+    
+    oauth/signin -> oauth/signin.blade.php
+        In the sign-in form HTML page you should tell the user the name of the client that their signing into.
+    
+    oauth/authorize -> oauth/authorize.blade.php
+        show explicit authorization form
+        Once the user has signed in (if they didn’t already have an existing session)
+        then they should be redirected the authorise route where the user explicitly gives
+        permission for the client to act on their behalf.
+
+        In the authorize form the user should again be told the name of the client
+        and also list all the scopes (permissions) it is requesting.
+    
+    oauth/token -> oauth/[controller@token]
+
+**/
+
+//:: Begin Oauth Process ::
+Route::get('oauth', 'OauthController@action_index');
+//Route::get('oauth/index', 'OauthController@action_index');
+
+//:: Signin Client ::
+Route::get('oauth/signin', function(){return View::make('site/oauth/signin');});
+
+//:: Authorize Client ::
+Route::get('oauth/authorise', function(){return View::make('site/oauth/authorise');});
+
+Route::post('oauth/do_authorise', 'OauthController@action_authorise');
+
+//:: Get Access token ::
+Route::get('oauth/token', 'OauthController@action_access_token');
+
+Route::controller('oauth', 'OauthController');
+
+
 //:: Clientlication Routes ::
 
 # Filter for detect language

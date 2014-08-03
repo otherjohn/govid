@@ -19,6 +19,22 @@ class AdminClientsController extends AdminController {
         $this->client = $client;
     }
 
+
+public function keygen($length=40)
+{
+    $key = '';
+    list($usec, $sec) = explode(' ', microtime());
+    mt_srand((float) $sec + ((float) $usec * 100000));
+    
+    $inputs = array_merge(range('z','a'),range(0,9),range('A','Z'));
+
+    for($i=0; $i<$length; $i++)
+    {
+        $key .= $inputs{mt_rand(0,61)};
+    }
+    return $key;
+}
+
     /**
      * Show a list of all the blog posts.
      *
@@ -77,18 +93,61 @@ class AdminClientsController extends AdminController {
 
             // Update the blog post data
             $this->client->name            = Input::get('name');
-            $this->client->slug             = Str::slug(Input::get('name'));
-            $this->client->description          = Input::get('description');
-            $this->client->email      = Input::get('email');
-            $this->client->website = Input::get('website');
-            $this->client->callback    = Input::get('callback');
-            $this->client->user_id          = $user->id;
+            $this->client->id            = $this->keygen();
+            $this->client->secret            = $this->keygen();
+            
+            //$this->client->user_id          = $user->id;
 
+            
             // Was the blog post created?
-            if($this->client->save())
-            {
+            if($this->client->save()){
+                
+                //Create Endpoint Object
+                $endpoint = new ClientEndpoint(array('redirect_uri' => Input::get('callback')));
+                
+                $metadata = array(
+                    new ClientMetadata(array('key' => 'slug', 'value' => Str::slug(Input::get('name')))),
+                    new ClientMetadata(array('key' => 'description', 'value' => Str::slug(Input::get('description')))),
+                    new ClientMetadata(array('key' => 'email', 'value' => Str::slug(Input::get('email')))),
+                    new ClientMetadata(array('key' => 'website', 'value' => Str::slug(Input::get('website'))))
+                );
+
+                
+                if(! $this->client->endpoint()->save($endpoint)){
+
+                    //delete client
+                    $id = $this->client->id;
+                    $this->client->delete();
+
+                    // Was the blog post deleted?
+                    $client = Client::find($id);
+                
+                    if(empty($client)){
+                        // Redirect to the blog post create page
+                        return Redirect::to('admin/clients/create')->with('error', Lang::get('admin/clients/messages.create.endpoint_error'));
+                    }                    
+                        
+                }
+
+                if(! $this->client->metadata()->saveMany($metadata)){
+
+                    //delete client
+                    $id = $this->client->id;
+                    $this->client->delete();
+
+                    // Was the blog post deleted?
+                    $client = Client::find($id);
+                
+                    if(empty($client)){
+                        // Redirect to the blog post create page
+                        return Redirect::to('admin/clients/create')->with('error', Lang::get('admin/clients/messages.create.metadata_error'));
+                    }                    
+                        
+                }
+                
                 // Redirect to the new blog post page
                 return Redirect::to('admin/clients/' . $this->client->id . '/edit')->with('success', Lang::get('admin/clients/messages.create.success'));
+                
             }
 
             // Redirect to the blog post create page
@@ -146,28 +205,35 @@ $rules = array(
 
         // Validate the inputs
         $validator = Validator::make(Input::all(), $rules);
-
+        //var_dump($validator->passes());die();
         // Check if the form validates with success
         if ($validator->passes())
         {
             // Update the blog post data
-            $this->client->name            = Input::get('name');
-            $this->client->slug             = Str::slug(Input::get('name'));
-            $this->client->description          = Input::get('description');
-            $this->client->email      = Input::get('email');
-            $this->client->website = Input::get('website');
-            $this->client->callback    = Input::get('callback');
-            $this->client->user_id          = $user->id;
+            $client->name            = Input::get('name');
+            $client->slug             = Str::slug(Input::get('name'));
+            $client->description          = Input::get('description');
+            $client->email      = Input::get('email');
+            $client->website = Input::get('website');
+            $client->endpoint()->redirect_uri = Input::get('callback');
+            if($client->endpoint()->save()){
 
-            // Was the blog post updated?
-            if($client->save())
-            {
-                // Redirect to the new blog post page
-                return Redirect::to('admin/clients/' . $client->id . '/edit')->with('success', Lang::get('admin/clients/messages.update.success'));
+                // Was the blog post updated?
+                if($client->save()){
+                
+                    // Redirect to the new blog post page
+                    return Redirect::to('admin/clients/' . $client->id . '/edit')->with('success', Lang::get('admin/clients/messages.update.success'));
+                }
+
+                // Redirect to the blogs post management page
+                return Redirect::to('admin/clients/' . $client->id . '/edit')->with('error', Lang::get('admin/clients/messages.update.endpoint_error'));    
             }
 
+            
             // Redirect to the blogs post management page
             return Redirect::to('admin/clients/' . $client->id . '/edit')->with('error', Lang::get('admin/clients/messages.update.error'));
+
+            
         }
 
         // Form validation failed
@@ -210,6 +276,8 @@ $rules = array(
         if ($validator->passes())
         {
             $id = $client->id;
+
+             //this should also delete related models that have the mysql "on delete cascade" attribute set
             $client->delete();
 
             // Was the blog post deleted?
@@ -231,7 +299,7 @@ $rules = array(
      */
     public function getData()
     {
-        $clients = Client::select(array('clients.id', 'clients.name', 'clients.created_at'));
+        $clients = Client::select(array('oauth_clients.id', 'oauth_clients.name', 'oauth_clients.created_at'));
 
         return Datatables::of($clients)
 

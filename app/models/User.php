@@ -9,6 +9,29 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
 class User extends ConfideUser implements UserInterface, RemindableInterface{
+
+        /**
+         * Validation rules
+         */
+        public static $rules = array(
+        'username' => 'required|email|unique:users',
+        'email' => 'required|email|unique:users',
+        'password' => 'required|min:4|confirmed',
+        'password_confirmation' => 'min:4',
+    );
+
+        /**
+     * Rules for when updating a user.
+     *
+     * @deprecated
+     * @var array
+     */
+    protected $updateRules = array(
+        'email' => 'required|email',
+        'password' => 'min:4|confirmed',
+        'password_confirmation' => 'min:4',
+    );
+
     use HasRole;
 
     /**

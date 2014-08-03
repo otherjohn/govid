@@ -14,8 +14,8 @@
         "zizaco/confide": "~3.2",
         "zizaco/entrust": "~1.2",
         "bllim/datatables": "~1.3",
-	"laravelbook/ardent": "dev-master",
-	"league/oauth2-server": "3.*"
+    	"laravelbook/ardent": "dev-master",
+        "league/oauth2-server": "3.*"
     },
     "require-dev": {
         "way/generators": "~2.6",

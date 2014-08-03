@@ -2,67 +2,238 @@
 
 class ClientsTableSeeder extends Seeder {
 
-    protected $description = 'In mea autem etiam menandri, quot elitr vim ei, eos semper disputationi id? Per facer clientetere eu, duo et animal maiestatis. Omnesque invidunt mnesarchum ex mel, vis no case senserit dissentias. Te mei minimum singulis inimicus, ne labores accusam necessitatibus vel, vivendo nominavi ne sed. Posidonium scriptorem consequuntur cum ex? Posse fabulas iudicabit in nec, eos cu electram forensibus, pro ei commodo tractatos reformidans. Qui eu lorem augue alterum, eos in facilis pericula mediocritatem?
+protected $description = 'In mea autem etiam menandri, quot elitr vim ei, eos semper disputationi id? Per facer clientetere eu,
+                              duo et animal maiestatis. Omnesque invidunt mnesarchum ex mel, vis no case senserit dissentias. Te mei
+                              minimum singulis inimicus, ne labores accusam necessitatibus vel, vivendo nominavi ne sed. Posidonium
+                              scriptorem consequuntur cum ex? Posse fabulas iudicabit in nec, eos cu electram forensibus, pro ei commodo
+                              tractatos reformidans. Qui eu lorem augue alterum, eos in facilis pericula mediocritatem?
+                              Est hinc legimus oporteat in. Sit ei melius delicatissimi. Duo ex qualisque adolescens!
+                              Pri cu solum aeque. Aperiri docendi vituperatoribus has ea';
 
-Est hinc legimus oporteat in. Sit ei melius delicatissimi. Duo ex qualisque adolescens! Pri cu solum aeque. Aperiri docendi vituperatoribus has ea!
+public function keygen($length=40)
+{
+    $key = '';
+    list($usec, $sec) = explode(' ', microtime());
+    mt_srand((float) $sec + ((float) $usec * 100000));
+    
+    $inputs = array_merge(range('z','a'),range(0,9),range('A','Z'));
 
-Sed ut ludus perfecto sensibus, no mea iisque facilisi. Choro tation melius et mea, ne vis nisl insolens. Vero autem scriptorem cu qui? Errem dolores no nam, mea tritani platonem id! At nec tantas consul, vis mundi petentium elaboraret ex, mel clientareat maiestatis at.
-
-Sed et eros concludaturque. Mel ne aperiam comprehensam! Ornatus delicatissimi eam ex, sea an quidam tritani placerat? Ad eius iriure consequat eam, mazim temporibus conclusionemque eum ex.
-
-Te amet sumo usu, ne autem impetus scripserit duo, ius ei mutat labore inciderint! Id nulla comprehensam his? Ut eam deleniti argumentum, eam clientellantur definitionem ad. Pro et purto partem mucius!
-
-Cu liber primis sed, esse evertitur vis ad. Ne graeco maiorum mea! In eos nostro docendi conclusionemque. Ne sit audire blandit tractatos? An nec dicam causae meliore, pro tamquam offendit efficiendi ut.
-
-Te dicta sadipscing nam, denique albucius conclusionemque ne usu, mea eu euripidis philosophia! Qui at vivendo efficiendi! Vim ex delenit blandit oportere, in iriure placerat cum. Te cum meis altera, ius ex quis veri.
-
-Mutat propriae eu has, mel ne veri bonorum tincidunt. Per noluisse sensibus honestatis ut, stet singulis ea eam, his dicunt vivendum mediocrem ei. Ei usu mutat efficiantur, eum verear aperiam definitiones an! Simul dicam instructior ius ei. Cu ius facer doming cotidieque! Quot principes eu his, usu vero dicat an.
-
-Ex dicta perpetua qui, pericula intellegam scripserit id vel. Id fabulas ornatus necessitatibus mel. Prompta dolorem clientetere ea has. Vel ad expetendis instructior!
-
-Te his dolorem adversarium? Pri eu rebum viris, tation molestie id pri. Mel ei stet inermis dissentias. Sed ea dolorum detracto vituperata. Possit oportere similique cu nec, ridens animal quo ex?';
-
-    public function run()
+    for($i=0; $i<$length; $i++)
     {
-        DB::table('clients')->delete();
+        $key .= $inputs{mt_rand(0,61)};
+    }
+    return $key;
+}
 
-        $user_id = User::first()->id;
+    public function run(){
 
-        DB::table('clients')->insert( array(
+        DB::table('oauth_client_metadata')->delete();
+        DB::table('oauth_client_endpoints')->delete();
+        DB::table('oauth_client_scopes')->delete();
+        DB::table('oauth_client_grants')->delete();
+        DB::table('oauth_clients')->delete();
+
+        //$clients = array($this->keygen(), $this->keygen(), $this->keygen());
+        $clients = array("nqcXKxMpMxg29R9zYcExaFTAHhiBZK2Db9PXZ96Y", "ekdlKmeJzLO4n7ry4volTzaf1puoHVXQxlGyLi4t", "pRZPmRBXYMG7RYJVF571A3dnFvP7XqDVMDuWSaWU");
+
+        DB::table('oauth_clients')->insert( array(
             array(
-                'user_id'    => $user_id,
+                'id'    => $clients[0],
+                'secret'    => $this->keygen(),
                 'name'      => 'Client1',
-                'slug'       => 'client1',
-                'callback'       => 'http://gov.nellcorp.com/client1',
-                'description'    => $this->description,
-                'email' => 'figassis@nellcorp.com',
-                'website' => 'http://gov.nellcorp.com/client1',
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ),
             array(
-                'user_id'    => $user_id,
+                'id'    => $clients[1],
+                'secret'    => $this->keygen(),
                 'name'      => 'Client2',
-                'slug'       => 'client2',
-                'callback'       => 'http://gov.nellcorp.com/client2',
-                'description'    => $this->description,
-                'email' => 'figassis@nellcorp.com',
-                'website' => 'http://nellcorp.com/client2',
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ),
             array(
-                'user_id'    => $user_id,
+                'id'    => $clients[2],
+                'secret'    => $this->keygen(),
                 'name'      => 'Client3',
-                'slug'       => 'client3',
-                'callback'       => 'http://gov.nellcorp.com/client3',
-                'description'    => $this->description,
-                'email' => 'figassis@nellcorp.com',
-                'website' => 'http://nellcorp.com/client3',
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ))
         );
+    
+DB::table('oauth_client_endpoints')->insert( array(
+            array(
+                'client_id'    => $clients[0],
+                'redirect_uri' => 'http://gov.nellcorp.com/client1',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[1],
+                'redirect_uri' => 'http://gov.nellcorp.com/client2',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[2],
+                'redirect_uri' => 'http://gov.nellcorp.com/client3',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ))
+        );
+
+DB::table('oauth_client_grants')->insert( array(
+            array(
+                'client_id'    => $clients[0],
+                'grant_id' => 1,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[1],
+                'grant_id' => 1,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[2],
+                'grant_id' => 1,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ))
+        );
+
+DB::table('oauth_client_scopes')->insert( array(
+            array(
+                'client_id'    => $clients[0],
+                'scope_id' => 1,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[0],
+                'scope_id' => 2,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[0],
+                'scope_id' => 3,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[1],
+                'scope_id' => 1,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[1],
+                'scope_id' => 3,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[2],
+                'scope_id' => 2,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[2],
+                'scope_id' => 3,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ))
+        );
+
+DB::table('oauth_client_metadata')->insert( array(
+            array(
+                'client_id'    => $clients[0],
+                'key' => 'email',
+                'value' => 'admin@domain.com',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[0],
+                'key' => 'description',
+                'value' => $this->description,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[0],
+                'key' => 'website',
+                'value' => 'http://gov.nellcorp.com/client1',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[0],
+                'key' => 'slug',
+                'value' => 'client1',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[1],
+                'key' => 'email',
+                'value' => 'admin@domain.com',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[1],
+                'key' => 'description',
+                'value' => $this->description,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[1],
+                'key' => 'website',
+                'value' => 'http://gov.nellcorp.com/client2',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[1],
+                'key' => 'slug',
+                'value' => 'client2',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[2],
+                'key' => 'email',
+                'value' => 'admin@domain.com',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[2],
+                'key' => 'description',
+                'value' => $this->description,
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[2],
+                'key' => 'website',
+                'value' => 'http://gov.nellcorp.com/client3',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'client_id'    => $clients[2],
+                'key' => 'slug',
+                'value' => 'client3',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ))
+        );
+
     }
 
 }

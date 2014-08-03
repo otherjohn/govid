@@ -9,7 +9,7 @@ body {
 }
 
 .form-group {
-	margin-bottom: 0px;
+	margin-bottom: 0;
 }
 
 .topformpad{
@@ -28,4 +28,13 @@ body {
 
 .user_name{
 	margin-bottom: 40px;
+}
+
+.oauth-login{
+	padding-top: 150px;
+	margin-bottom: 100px;
+}
+.oauth-scope{
+	padding-top: 150px;
+	margin-bottom: 100px;
 }

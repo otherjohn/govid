@@ -421,6 +421,7 @@ class Authorization
     {
         $grantType = $this->getParam('grant_type', 'post', $inputParams);
 
+
         if (is_null($grantType)) {
             throw new Exception\ClientException(sprintf(self::$exceptionMessages['invalid_request'], 'grant_type'), 0);
         }
@@ -429,6 +430,7 @@ class Authorization
         if ( ! in_array($grantType, array_keys($this->grantTypes))) {
             throw new Exception\ClientException(sprintf(self::$exceptionMessages['unsupported_grant_type'], $grantType), 7);
         }
+
 
         // Complete the flow
         return $this->getGrantType($grantType)->completeFlow($inputParams);
@@ -457,6 +459,7 @@ class Authorization
      */
     public function getParam($param = '', $method = 'get', $inputParams = array(), $default = null)
     {
+
         if (is_string($param)) {
             if (isset($inputParams[$param])) {
                 return $inputParams[$param];

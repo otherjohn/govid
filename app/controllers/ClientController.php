@@ -52,7 +52,8 @@ class ClientController extends BaseController {
 	public function getView($slug)
 	{
 		// Get this blog post data
-		$client = $this->client->where('slug', '=', $slug)->first();
+		$client = ClientMetadata::where('key', '=', 'slug')->where('value', '=', $slug)->first()->client()->first();
+		//var_dump($client);die;
 
 		// Check if the blog post exists
 		if (is_null($client))

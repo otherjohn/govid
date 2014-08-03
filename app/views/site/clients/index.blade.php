@@ -20,7 +20,7 @@
 			</div>
 			<div class="col-md-6">
 				<p>
-					{{ String::tidy(Str::limit($client->description, 200)) }}
+					{{ String::tidy(Str::limit($client->content(), 200)) }}
 				</p>
 				<p><a class="btn btn-mini btn-default" href="{{{ $client->url() }}}">Read more</a></p>
 			</div>

@@ -4,20 +4,20 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c87a56ac2d2e97a83ccf661d3ccdae9d",
+    "hash": "747b381c7e70b108e2920b5eb53e3c86",
     "packages": [
         {
             "name": "bllim/datatables",
-            "version": "v1.4.1",
+            "version": "v1.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/bllim/laravel4-datatables-package.git",
-                "reference": "485c1e0c073ede16383eb6f1e64c93cb9d89b8dd"
+                "reference": "9465ef994c7f6bfa2359fc8b7da23da154a5cb2b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/bllim/laravel4-datatables-package/zipball/485c1e0c073ede16383eb6f1e64c93cb9d89b8dd",
-                "reference": "485c1e0c073ede16383eb6f1e64c93cb9d89b8dd",
+                "url": "https://api.github.com/repos/bllim/laravel4-datatables-package/zipball/9465ef994c7f6bfa2359fc8b7da23da154a5cb2b",
+                "reference": "9465ef994c7f6bfa2359fc8b7da23da154a5cb2b",
                 "shasum": ""
             },
             "require": {
@@ -59,7 +59,7 @@
                 "laravel",
                 "laravel4"
             ],
-            "time": "2014-07-25 08:06:47"
+            "time": "2014-07-25 20:22:03"
         },
         {
             "name": "classpreloader/classpreloader",
@@ -822,16 +822,16 @@
         },
         {
             "name": "predis/predis",
-            "version": "v0.8.6",
+            "version": "v0.8.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nrk/predis.git",
-                "reference": "239864d9a0929f29bf8c5a8370ef743537c4953d"
+                "reference": "4123fcd85d61354c6c9900db76c9597dbd129bf6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nrk/predis/zipball/239864d9a0929f29bf8c5a8370ef743537c4953d",
-                "reference": "239864d9a0929f29bf8c5a8370ef743537c4953d",
+                "url": "https://api.github.com/repos/nrk/predis/zipball/4123fcd85d61354c6c9900db76c9597dbd129bf6",
+                "reference": "4123fcd85d61354c6c9900db76c9597dbd129bf6",
                 "shasum": ""
             },
             "require": {
@@ -868,7 +868,7 @@
                 "predis",
                 "redis"
             ],
-            "time": "2014-07-15 09:54:33"
+            "time": "2014-08-01 09:43:10"
         },
         {
             "name": "psr/log",

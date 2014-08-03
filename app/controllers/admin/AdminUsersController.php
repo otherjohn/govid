@@ -78,7 +78,7 @@ class AdminUsersController extends AdminController {
 		$mode = 'create';
 
 		// Show the page
-		return View::make('admin/users/create_edit', compact('roles', 'permissions', 'selectedRoles', 'selectedPermissions', 'title', 'mode'));
+		return View::make('admin/users/create', compact('roles', 'permissions', 'selectedRoles', 'selectedPermissions', 'title', 'mode'));
     }
 
     /**
@@ -152,7 +152,7 @@ class AdminUsersController extends AdminController {
         	// mode
         	$mode = 'edit';
 
-        	return View::make('admin/users/create_edit', compact('user', 'roles', 'permissions', 'title', 'mode'));
+        	return View::make('admin/users/edit', compact('user', 'roles', 'permissions', 'title', 'mode'));
         }
         else
         {
@@ -175,7 +175,6 @@ class AdminUsersController extends AdminController {
         if ($validator->passes())
         {
             $oldUser = clone $user;
-            $user->username = Input::get( 'username' );
             $user->email = Input::get( 'email' );
             $user->confirmed = Input::get( 'confirm' );
 

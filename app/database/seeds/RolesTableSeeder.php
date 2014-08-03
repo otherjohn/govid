@@ -14,10 +14,10 @@ class RolesTableSeeder extends Seeder {
         $personRole->name = 'person';
         $personRole->save();
 
-        $user = User::where('username','=','admin')->first();
+        $user = User::where('username','=','admin@example.org')->first();
         $user->attachRole( $adminRole );
 
-        $user = User::where('username','=','user')->first();
+        $user = User::where('username','=','user@example.org')->first();
         $user->attachRole( $personRole );
     }
 

@@ -43,7 +43,7 @@
                           
                           <div class="col-xs-6">
                               <label for="callback"><h4>Callback URL</h4></label>
-                              <input type="text" class="form-control" name="callback" id="callback" value="{{{ Input::old('callback', isset($client) ? $client->callback : null) }}}">
+                              <input type="text" class="form-control" name="callback" id="callback" value="{{{ Input::old('callback', isset($client) ? $client->endpoint()->redirect_uri : null) }}}">
                               {{{ $errors->first('callback', '<span class="help-block">:message</span>') }}}
                           </div>
                       </div>

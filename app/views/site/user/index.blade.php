@@ -128,10 +128,7 @@ body {
                       </div>
                 </form>
               </div>
-        @endif
-        @endif
-          @if (Auth::check())
-          @if (Auth::user()->hasRole('person'))
+        @else
           <ul class="nav nav-tabs" id="myTab">
             <li><a href="#settings" data-toggle="tab">Profile</a></li>
             <li class="active"><a href="#home" data-toggle="tab">Approved Apps</a></li>

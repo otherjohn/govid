@@ -8,9 +8,11 @@ class DatabaseSeeder extends Seeder {
 
         // Add calls to Seeders here
         $this->call('UsersTableSeeder');
-        $this->call('ClientsTableSeeder');
         $this->call('RolesTableSeeder');
         $this->call('PermissionsTableSeeder');
+        $this->call('ScopesTableSeeder');
+        $this->call('GrantsTableSeeder');
+        $this->call('ClientsTableSeeder');
     }
 
 }

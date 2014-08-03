@@ -11,6 +11,8 @@ return array(
 
 	'update' => array(
 		'error'   => 'App was not updated, please try again',
+		'endpoint_error'   => 'Endpoint was not updated, please try again',
+		'metadata_error'   => 'Metadata was not updated, please try again',
 		'success' => 'App updated successfully.'
 	),
 
