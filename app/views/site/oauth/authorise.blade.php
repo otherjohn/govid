@@ -20,7 +20,7 @@
             {{$scopes[$scope->scope->name] = $scope->scope->description}} <br/>
         @endif
     @endforeach
-
+<!--
     @if(count($scopes) < Scope::all()->count())
         
         {{Client::find(Session::get('client_id'))->first()->name}} will not have access to:<br/><br/>
@@ -31,6 +31,7 @@
             @endif
         @endforeach
     @endif
+  -->
                       <div class="form-group">
                            <div class="col-xs-12">
                                 <br>

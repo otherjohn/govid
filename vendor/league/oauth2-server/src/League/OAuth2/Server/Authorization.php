@@ -73,6 +73,12 @@ class Authorization
      */
     protected $requireStateParam = false;
 
+        /**
+     * Require the "state" parameter to be in checkAuthoriseParams()
+     * @var boolean
+     */
+    protected $requireNonceParam = false;
+
     /**
      * The request object
      * @var Util\RequestInterface
@@ -331,6 +337,27 @@ class Authorization
     public function requireStateParam($require = true)
     {
         $this->requireStateParam = $require;
+        return $this;
+    }
+
+    /**
+     * Require the "state" paremter in checkAuthoriseParams()
+     * @param  boolean $require
+     * @return void
+     */
+    public function nonceParamRequired()
+    {
+        return $this->requireNonceParam;
+    }
+
+    /**
+     * Require the "state" paremter in checkAuthoriseParams()
+     * @param  boolean $require
+     * @return void
+     */
+    public function requireNonceParam($require = true)
+    {
+        $this->requireNonceParam = $require;
         return $this;
     }
 

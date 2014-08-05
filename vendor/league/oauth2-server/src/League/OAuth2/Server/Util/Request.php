@@ -70,7 +70,7 @@ class Request implements RequestInterface
     }
 
     public function header($index = null, $default = null)
-    {
+    {   
         return $this->getPropertyValue('headers', $index, $default);
     }
 

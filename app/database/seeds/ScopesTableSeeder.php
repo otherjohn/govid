@@ -2,8 +2,6 @@
 
 class ScopesTableSeeder extends Seeder {
 
-    protected $description = 'In mea autem etiam menandri, quot elitr vim ei, eos semper disputationi.';
-
     public function run()
     {
         DB::table('oauth_scopes')->delete();
@@ -12,23 +10,23 @@ class ScopesTableSeeder extends Seeder {
 
         DB::table('oauth_scopes')->insert( array(
             array(
-                'scope'    => 'scope1',
-                'name' => 'Scope 1',
-                'description'    => "Read your first name",
+                'scope'    => 'openid',
+                'name' => 'ID Number',
+                'description'    => "Read your ID number.",
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ),
             array(
-                'scope'    => 'scope2',
-                'name' => 'Scope 2',
-                'description'    => "Read your last name",
+                'scope'    => 'profile',
+                'name' => 'Profile',
+                'description'    => "Read your Name, Email, Phone and Address",
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ),
             array(
-                'scope'    => 'scope3',
-                'name' => 'Scope 3',
-                'description'    => "Read your full name",
+                'scope'    => 'email',
+                'name' => 'Name and Email',
+                'description'    => "Read your Name and Email address",
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ))

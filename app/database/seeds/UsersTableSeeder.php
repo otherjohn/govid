@@ -2,6 +2,22 @@
 
 class UsersTableSeeder extends Seeder {
 
+
+public function keygen($length=40)
+{
+    $key = '';
+    list($usec, $sec) = explode(' ', microtime());
+    mt_srand((float) $sec + ((float) $usec * 100000));
+    
+    $inputs = array_merge(range('z','a'),range(0,9),range('A','Z'));
+
+    for($i=0; $i<$length; $i++)
+    {
+        $key .= $inputs{mt_rand(0,61)};
+    }
+    return $key;
+}
+
     public function run()
     {
         DB::table('users')->delete();
@@ -10,7 +26,7 @@ class UsersTableSeeder extends Seeder {
         $users = array(
             array(
                 'username'      => 'admin@example.org',
-                'pid'      => '111111111',
+                'pid'      => $this->keygen(20),
                 'first_name'      => 'John',
                 'last_name'      => 'Doe',
                 'email'      => 'admin@example.org',
@@ -28,7 +44,7 @@ class UsersTableSeeder extends Seeder {
             ),
             array(
                 'username'      => 'user@example.org',
-                'pid'      => '222222222',
+                'pid'      => $this->keygen(20),
                 'first_name'      => 'Jane',
                 'last_name'      => 'Doe',
                 'email'      => 'user@example.org',

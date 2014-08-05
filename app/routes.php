@@ -111,15 +111,27 @@ Route::get('oauth', 'OauthController@action_index');
 //Route::get('oauth/index', 'OauthController@action_index');
 
 //:: Signin Client ::
-Route::get('oauth/signin', function(){return View::make('site/oauth/signin');});
+Route::get('signin', function(){return View::make('site/oauth/signin');});
 
 //:: Authorize Client ::
-Route::get('oauth/authorise', function(){return View::make('site/oauth/authorise');});
+Route::get('authorise', function(){return View::make('site/oauth/authorise');});
 
-Route::post('oauth/do_authorise', 'OauthController@action_authorise');
+Route::post('do_authorise', 'OauthController@action_authorise');
 
 //:: Get Access token ::
-Route::get('oauth/token', 'OauthController@action_access_token');
+Route::get('token', 'OauthController@action_access_token');
+
+//:: Verify ID Token ::
+Route::get('check', 'OauthController@action_check_id');
+
+//:: UserInfo Endpoint ::
+Route::get('userinfo', 'OauthController@action_userinfo');
+
+//:: Provider Configuration Endpoint ::
+Route::get('.well-known/openid-configuration', 'OauthController@action_configuration');
+
+//:: Provider Configuration Endpoint ::
+Route::get('jwks', 'OauthController@action_jwks');
 
 Route::controller('oauth', 'OauthController');
 

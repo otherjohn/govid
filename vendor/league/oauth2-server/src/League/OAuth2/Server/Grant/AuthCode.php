@@ -79,7 +79,7 @@ class AuthCode implements GrantTypeInterface {
 
 
         // Auth params
-        $authParams = $this->authServer->getParam(array('client_id', 'redirect_uri', 'response_type', 'scope', 'state'), 'get', $inputParams);
+        $authParams = $this->authServer->getParam(array('client_id', 'redirect_uri', 'response_type', 'scope', 'state', 'nonce'), 'get', $inputParams);
 
 
         if (is_null($authParams['client_id'])) {
@@ -95,6 +95,10 @@ class AuthCode implements GrantTypeInterface {
             throw new Exception\ClientException(sprintf($this->authServer->getExceptionMessage('invalid_request'), 'state'), 0);
         }
 
+        if ($this->authServer->nonceParamRequired() === true && is_null($authParams['nonce'])) {
+            throw new Exception\ClientException(sprintf($this->authServer->getExceptionMessage('invalid_request'), 'nonce'), 0);
+        }
+
         
         // Validate client ID and redirect URI
         $clientDetails = $this->authServer->getStorage('client')->getClient($authParams['client_id'], null, $authParams['redirect_uri'], $this->identifier);
@@ -105,6 +109,7 @@ class AuthCode implements GrantTypeInterface {
         }
 
         $authParams['client_details'] = $clientDetails;
+
 
         if (is_null($authParams['response_type'])) {
             throw new Exception\ClientException(sprintf($this->authServer->getExceptionMessage('invalid_request'), 'response_type'), 0);
@@ -132,12 +137,9 @@ class AuthCode implements GrantTypeInterface {
                 $scopes = array($this->authServer->getDefaultScope());
             }
         }
-
         $authParams['scopes'] = array();
-
         foreach ($scopes as $scope) {
             $scopeDetails = $this->authServer->getStorage('scope')->getScope($scope, $authParams['client_id'], $this->identifier);
-
             if ($scopeDetails === false) {
                 throw new Exception\ClientException(sprintf($this->authServer->getExceptionMessage('invalid_scope'), $scope), 4);
             }
@@ -145,7 +147,6 @@ class AuthCode implements GrantTypeInterface {
             $authParams['scopes'][] = $scopeDetails;
         }
 
-        
         return $authParams;
     }
 
@@ -159,6 +160,8 @@ class AuthCode implements GrantTypeInterface {
      */
     public function newAuthoriseRequest($type, $typeId, $authParams = array())
     {
+
+
         // Generate an auth code
         $authCode = SecureKey::make();
 
@@ -173,7 +176,6 @@ class AuthCode implements GrantTypeInterface {
 
         // Associate the auth code
         $authCodeId = $this->authServer->getStorage('session')->associateAuthCode($sessionId, $authCode, time() + $this->authTokenTTL);
-
         // Associate the scopes to the auth code
         foreach ($authParams['scopes'] as $scope) {
             $this->authServer->getStorage('session')->associateAuthCodeScope($authCodeId, $scope['id']);
@@ -213,7 +215,6 @@ class AuthCode implements GrantTypeInterface {
         }
 
         $authParams['client_details'] = $clientDetails;
-
         // Validate the authorization code
         if (is_null($authParams['code'])) {
             throw new Exception\ClientException(sprintf($this->authServer->getExceptionMessage('invalid_request'), 'code'), 0);
@@ -239,6 +240,27 @@ class AuthCode implements GrantTypeInterface {
 
         // Create an access token
         $accessTokenId = $this->authServer->getStorage('session')->associateAccessToken($authCodeDetails['session_id'], $accessToken, $accessTokenExpires);
+        
+        /*
+        iss: Issuer Identifier for the Issuer of the response
+        sub: Subject identifier. A locally unique and never reassigned identifier within the Issuer for the End-User, which is intended to be consumed by the Client
+        aud: Audience(s) that this ID Token is intended for. It MUST contain the OAuth 2.0 client_id of the Relying Party as an audience value
+        exp: Expiration time on or after which the ID Token MUST NOT be accepted for processing
+        iat: Time at which the JWT was issued
+        acr:0
+        nonce:
+        */
+        //Create ID Token here, for OpenID Connect
+        $id_token = array(
+            "iss" => \Config::get('app.url'),
+            "sub" => \User::find($this->authServer->getStorage('session')->validateAccessToken($accessToken)['owner_id'])->pid,
+            "aud" => $clientDetails['metadata']['website'],
+            "iat" => time(),
+            "exp" => $accessTokenExpires,
+            "acr" => 0,
+            "nonce" => \Session::get('nonce')
+        );
+        
 
         // Associate scopes with the access token
         if (count($scopes) > 0) {
@@ -251,7 +273,8 @@ class AuthCode implements GrantTypeInterface {
             'access_token'  =>  $accessToken,
             'token_type'    =>  'Bearer',
             'expires'       =>  $accessTokenExpires,
-            'expires_in'    =>  $accessTokenExpiresIn
+            'expires_in'    =>  $accessTokenExpiresIn,
+            'id_token'      =>  $id_token
         );
 
         // Associate a refresh token if set

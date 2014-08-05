@@ -119,6 +119,7 @@ class OauthSession extends Eloquent implements SessionInterface{
      */
     public function associateAuthCode($sessionId, $authCode, $expireTime){
     	$insert_id = DB::table('oauth_session_authcodes')->insertGetId(array('session_id' => $sessionId, 'auth_code' => $authCode, 'auth_code_expires' => $expireTime));
+        return $insert_id;
     }
 
     /**
@@ -210,12 +211,13 @@ class OauthSession extends Eloquent implements SessionInterface{
     							FROM `oauth_session_access_tokens` JOIN oauth_sessions ON oauth_sessions.`id` = session_id
     							WHERE access_token = ? AND access_token_expires >= UNIX_TIMESTAMP(NOW())', array($accessToken));
 
-     	if(empty($results)){return false;}
+        if(empty($results)){return false;}
         $results = $results[0];
         $response['session_id'] = $results->session_id;
         $response['client_id'] = $results->client_id;
         $response['owner_id'] = $results->owner_id;
         $response['owner_type'] = $results->owner_type;
+        return $response;
     }
 
     /**
@@ -309,7 +311,7 @@ class OauthSession extends Eloquent implements SessionInterface{
      * @return void
      */
     public function associateAuthCodeScope($authCodeId, $scopeId){
-    	$insert_id = DB::table('oauth_session_authcode_scopes')->insertGetId(array('oauth_session_authcode_id' => $authCodeId, 'scope_id' => $scopeId));
+        $insert_id = DB::table('oauth_session_authcode_scopes')->insertGetId(array('oauth_session_authcode_id' => $authCodeId, 'scope_id' => $scopeId));
     }
 
     /**

@@ -116,12 +116,6 @@ DB::table('oauth_client_scopes')->insert( array(
                 'updated_at' => new DateTime,
             ),
             array(
-                'client_id'    => $clients[0],
-                'scope_id' => 3,
-                'created_at' => new DateTime,
-                'updated_at' => new DateTime,
-            ),
-            array(
                 'client_id'    => $clients[1],
                 'scope_id' => 1,
                 'created_at' => new DateTime,
@@ -130,12 +124,6 @@ DB::table('oauth_client_scopes')->insert( array(
             array(
                 'client_id'    => $clients[1],
                 'scope_id' => 3,
-                'created_at' => new DateTime,
-                'updated_at' => new DateTime,
-            ),
-            array(
-                'client_id'    => $clients[2],
-                'scope_id' => 2,
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ),

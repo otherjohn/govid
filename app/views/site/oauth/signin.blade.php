@@ -13,7 +13,7 @@
 <div class="col-sm-4 oauth-login">
 <form method="POST" action="{{{ URL::to('/user/login') }}}" accept-charset="UTF-8">
     <input type="hidden" name="_token" value="{{{ Session::getToken() }}}">
-    <input type="hidden" name="oauth" value="oauth/authorise">
+    <input type="hidden" name="oauth" value="authorise">
     <fieldset>
         <div class="form-group">
             <label for="email">{{{ Lang::get('confide::confide.username') }}}</label>
@@ -52,7 +52,7 @@ The Application {{Client::find(Session::get('client_id'))->first()->name}} would
             {{$scopes[$scope->scope->name] = $scope->scope->description}} <br/>
         @endif
     @endforeach
-
+<!--
     @if(count($scopes) < Scope::all()->count())
         
         The Application will not have access to the following:<br/><br/>
@@ -63,6 +63,7 @@ The Application {{Client::find(Session::get('client_id'))->first()->name}} would
             @endif
         @endforeach
     @endif
+-->
                                     
 </div>
 

@@ -49,4 +49,5 @@ return array(
     'Boris' => array($vendorDir . '/d11wtq/boris/lib'),
     'Bllim\\Datatables' => array($vendorDir . '/bllim/datatables/src'),
     'Barryvdh\\LaravelIdeHelper' => array($vendorDir . '/barryvdh/laravel-ide-helper/src'),
+    'AsymmetriCrypt' => array($vendorDir . '/asymmetricrypt/asymmetricrypt/lib'),
 );

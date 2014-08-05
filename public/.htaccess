@@ -8,3 +8,6 @@
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^ index.php [L]
 </IfModule>
+
+# Make available the variable $_ENV['HTTP_AUTHORIZATION'] in PHP.
+SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1

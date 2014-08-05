@@ -1176,59 +1176,6 @@
         ]
     },
     {
-        "name": "patchwork/utf8",
-        "version": "v1.1.24",
-        "version_normalized": "1.1.24.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/nicolas-grekas/Patchwork-UTF8.git",
-            "reference": "40f552c019956f446553b19f7de2da2f9c74d730"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/nicolas-grekas/Patchwork-UTF8/zipball/40f552c019956f446553b19f7de2da2f9c74d730",
-            "reference": "40f552c019956f446553b19f7de2da2f9c74d730",
-            "shasum": ""
-        },
-        "require": {
-            "lib-pcre": ">=7.3",
-            "php": ">=5.3.0"
-        },
-        "suggest": {
-            "ext-iconv": "Use iconv for best performance",
-            "ext-intl": "Use Intl for best performance",
-            "ext-mbstring": "Use Mbstring for best performance"
-        },
-        "time": "2014-06-17 08:23:06",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "Patchwork": "class/",
-                "Normalizer": "class/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "(Apache-2.0 or GPL-2.0)"
-        ],
-        "authors": [
-            {
-                "name": "Nicolas Grekas",
-                "email": "p@tchwork.com",
-                "role": "Developer"
-            }
-        ],
-        "description": "Extensive, portable and performant handling of UTF-8 and grapheme clusters for PHP",
-        "homepage": "https://github.com/nicolas-grekas/Patchwork-UTF8",
-        "keywords": [
-            "i18n",
-            "unicode",
-            "utf-8",
-            "utf8"
-        ]
-    },
-    {
         "name": "nesbot/carbon",
         "version": "1.10.0",
         "version_normalized": "1.10.0.0",
@@ -3048,6 +2995,160 @@
             "nosql",
             "predis",
             "redis"
+        ]
+    },
+    {
+        "name": "firebase/php-jwt",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "target-dir": "Firebase/PHP-JWT",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/firebase/php-jwt.git",
+            "reference": "fa7e362eeeec5ee808124626c3f1a612aadbce52"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/fa7e362eeeec5ee808124626c3f1a612aadbce52",
+            "reference": "fa7e362eeeec5ee808124626c3f1a612aadbce52",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.0"
+        },
+        "time": "2014-06-25 21:20:33",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "Authentication/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Neuman Vong",
+                "email": "neuman+pear@twilio.com",
+                "role": "Developer"
+            },
+            {
+                "name": "Anant Narayanan",
+                "email": "anant@php.net",
+                "role": "Developer"
+            }
+        ],
+        "description": "A simple library to encode and decode JSON Web Tokens (JWT) in PHP. Should conform to the current spec.",
+        "homepage": "https://github.com/firebase/php-jwt"
+    },
+    {
+        "name": "patchwork/utf8",
+        "version": "v1.1.25",
+        "version_normalized": "1.1.25.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/nicolas-grekas/Patchwork-UTF8.git",
+            "reference": "2d43bd047b120279511d45e76e61c5a9812d9a83"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/nicolas-grekas/Patchwork-UTF8/zipball/2d43bd047b120279511d45e76e61c5a9812d9a83",
+            "reference": "2d43bd047b120279511d45e76e61c5a9812d9a83",
+            "shasum": ""
+        },
+        "require": {
+            "lib-pcre": ">=7.3",
+            "php": ">=5.3.0"
+        },
+        "suggest": {
+            "ext-iconv": "Use iconv for best performance",
+            "ext-intl": "Use Intl for best performance",
+            "ext-mbstring": "Use Mbstring for best performance"
+        },
+        "time": "2014-08-05 08:00:32",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.1-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Patchwork": "class/",
+                "Normalizer": "class/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "(Apache-2.0 or GPL-2.0)"
+        ],
+        "authors": [
+            {
+                "name": "Nicolas Grekas",
+                "email": "p@tchwork.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "Extensive, portable and performant handling of UTF-8 and grapheme clusters for PHP",
+        "homepage": "https://github.com/nicolas-grekas/Patchwork-UTF8",
+        "keywords": [
+            "i18n",
+            "unicode",
+            "utf-8",
+            "utf8"
+        ]
+    },
+    {
+        "name": "asymmetricrypt/asymmetricrypt",
+        "version": "0.1.0",
+        "version_normalized": "0.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/xFlatlinex/AsymmetriCrypt.git",
+            "reference": "ebf6de3c523a5a6ac41bc7c9ca1d870ef9e385e7"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/xFlatlinex/AsymmetriCrypt/zipball/ebf6de3c523a5a6ac41bc7c9ca1d870ef9e385e7",
+            "reference": "ebf6de3c523a5a6ac41bc7c9ca1d870ef9e385e7",
+            "shasum": ""
+        },
+        "require": {
+            "ext-openssl": "*",
+            "php": ">=5.3.0"
+        },
+        "time": "2013-01-04 03:48:37",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "AsymmetriCrypt": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Luciano Longo",
+                "email": "luciano.longo@studioignis.net",
+                "homepage": "http://studioignis.net",
+                "role": "Developer"
+            }
+        ],
+        "description": "A simple PHP public key cryptography library",
+        "homepage": "https://github.com/xFlatlinex/AsymmetriCrypt",
+        "keywords": [
+            "Private Key",
+            "cryptography",
+            "encryption",
+            "public key",
+            "rsa",
+            "security"
         ]
     }
 ]

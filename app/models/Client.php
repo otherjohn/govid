@@ -106,7 +106,7 @@ class Client extends Eloquent implements ClientInterface{
      * @return bool|array               Returns false if the validation fails, array on success
      */
 
-     //getClient($authParams['client_id'], null, $authParams['redirect_uri'], $this->identifier);
+     
 public function getClient($clientId, $clientSecret = null, $redirectUri = null, $grantType = null)
     {
         $query = null;

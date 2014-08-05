@@ -84,14 +84,13 @@ class Scope extends Eloquent implements ScopeInterface{
      * @return bool|array If the scope doesn't exist return false
      */
     public function getScope($scope, $clientId = null, $grantType = null){
-	
-    	$results = DB::select('SELECT * FROM oauth_scopes WHERE scope = ?', array($scope));
+		$results = DB::select('SELECT * FROM oauth_scopes WHERE scope = ?', array($scope));
     	if(empty($results)){return false;}
 
-    	$response['id'] = $results['id'];
-    	$response['scope'] = $results['scope'];
-    	$response['name'] = $results['name'];
-    	$response['description'] = $results['description'];
+    	$response['id'] = $results[0]->id;
+    	$response['scope'] = $results[0]->scope;
+    	$response['name'] = $results[0]->name;
+    	$response['description'] = $results[0]->description;
 
     	return $response;
 
