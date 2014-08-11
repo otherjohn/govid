@@ -69,11 +69,6 @@ class PHPUnit_Framework_TestResult implements Countable
     /**
      * @var array
      */
-    protected $deprecatedFeatures = array();
-
-    /**
-     * @var array
-     */
     protected $failures = array();
 
     /**
@@ -152,6 +147,11 @@ class PHPUnit_Framework_TestResult implements Countable
      * @var boolean
      */
     protected $beStrictAboutTestSize = false;
+
+    /**
+     * @var boolean
+     */
+    protected $beStrictAboutTodoAnnotatedTests = false;
 
     /**
      * @var boolean
@@ -331,16 +331,6 @@ class PHPUnit_Framework_TestResult implements Countable
 
         $this->lastTestFailed = true;
         $this->time          += $time;
-    }
-
-    /**
-     * Adds a deprecated feature notice to the list of deprecated features used during run
-     *
-     * @param PHPUnit_Util_DeprecatedFeature $deprecatedFeature
-     */
-    public function addDeprecatedFeature(PHPUnit_Util_DeprecatedFeature $deprecatedFeature)
-    {
-        $this->deprecatedFeatures[] = $deprecatedFeature;
     }
 
     /**
@@ -529,28 +519,6 @@ class PHPUnit_Framework_TestResult implements Countable
     public function errors()
     {
         return $this->errors;
-    }
-
-    /**
-     * Returns an Enumeration for the deprecated features used.
-     *
-     * @return array
-     * @since  Method available since Release 3.5.7
-     */
-    public function deprecatedFeatures()
-    {
-        return $this->deprecatedFeatures;
-    }
-
-    /**
-     * Returns an Enumeration for the deprecated features used.
-     *
-     * @return array
-     * @since  Method available since Release 3.5.7
-     */
-    public function deprecatedFeaturesCount()
-    {
-        return count($this->deprecatedFeatures);
     }
 
     /**
@@ -754,6 +722,20 @@ class PHPUnit_Framework_TestResult implements Countable
 
         if ($errorHandlerSet === true) {
             restore_error_handler();
+        }
+
+        if ($this->beStrictAboutTodoAnnotatedTests && $test instanceof PHPUnit_Framework_TestCase) {
+            $annotations = $test->getAnnotations();
+
+            if (isset($annotations['method']['todo'])) {
+                $this->addFailure(
+                  $test,
+                  new PHPUnit_Framework_RiskyTestError(
+                    'Test method is annotated with @todo'
+                  ),
+                  $time
+                );
+            }
         }
 
         if ($error === true) {
@@ -962,6 +944,29 @@ class PHPUnit_Framework_TestResult implements Countable
     public function isStrictAboutTestSize()
     {
         return $this->beStrictAboutTestSize;
+    }
+
+    /**
+     * @param  boolean                     $flag
+     * @throws PHPUnit_Framework_Exception
+     * @since  Method available since Release 4.2.0
+     */
+    public function beStrictAboutTodoAnnotatedTests($flag)
+    {
+        if (!is_bool($flag)) {
+            throw PHPUnit_Util_InvalidArgumentHelper::factory(1, 'boolean');
+        }
+
+        $this->beStrictAboutTodoAnnotatedTests = $flag;
+    }
+
+    /**
+     * @return boolean
+     * @since  Method available since Release 4.2.0
+     */
+    public function isStrictAboutTodoAnnotatedTests()
+    {
+        return $this->beStrictAboutTodoAnnotatedTests;
     }
 
     /**

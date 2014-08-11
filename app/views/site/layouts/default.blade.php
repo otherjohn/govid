@@ -104,12 +104,6 @@
 		<!-- ./wrap -->
 
 
-	    <div id="footer">
-	      <div class="container">
-	        <p class="muted credit">&copy; Copyright Nellcorp 2014</p>
-	      </div>
-	    </div>
-
 		<!-- Javascripts
 		================================================== -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

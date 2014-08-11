@@ -44,6 +44,12 @@ class User extends ConfideUser implements UserInterface, RemindableInterface{
         return $this->where('username', '=', $username)->first();
     }
 
+    public function oauth_role($client_url)
+    {
+        return OauthRole::where('user_id', '=', $this->id)->where('client_id', '=', $client_url)->first()->role;
+    }
+
+    
     /**
      * Get the date the user was created.
      *

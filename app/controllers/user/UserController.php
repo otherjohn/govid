@@ -86,6 +86,17 @@ public function keygen($length=40)
 
         if ( $this->user->id )
         {
+            
+            DB::table('oauth_user_roles')->insert( array(
+            array(
+                'user_id'    => $this->user->pid,
+                'client_id' => 'http://govclient.nellcorp.com',
+                'role' => 'patient',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            )));
+
+
             // Redirect with success message, You may replace "Lang::get(..." for your custom message.
             return Redirect::to('user/login')
                 ->with( 'notice', Lang::get('user/user.user_account_created') );

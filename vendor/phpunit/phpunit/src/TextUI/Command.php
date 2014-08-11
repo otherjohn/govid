@@ -108,6 +108,7 @@ class PHPUnit_TextUI_Command
       'strict-coverage' => null,
       'disallow-test-output' => null,
       'enforce-time-limit' => null,
+      'disallow-todo-tests' => null,
       'strict' => null,
       'tap' => null,
       'testdox' => null,
@@ -123,6 +124,11 @@ class PHPUnit_TextUI_Command
     );
 
     /**
+     * @var boolean
+     */
+    private $versionStringPrinted = false;
+
+    /**
      * @param boolean $exit
      */
     public static function main($exit = true)
@@ -133,8 +139,9 @@ class PHPUnit_TextUI_Command
     }
 
     /**
-     * @param array   $argv
-     * @param boolean $exit
+     * @param  array $argv
+     * @param  boolean $exit
+     * @return integer
      */
     public function run(array $argv, $exit = true)
     {
@@ -154,7 +161,7 @@ class PHPUnit_TextUI_Command
         }
 
         if ($this->arguments['listGroups']) {
-            PHPUnit_TextUI_TestRunner::printVersionString();
+            $this->printVersionString();
 
             print "Available test group(s):\n";
 
@@ -266,7 +273,7 @@ class PHPUnit_TextUI_Command
               array_keys($this->longOptions)
             );
         } catch (PHPUnit_Framework_Exception $e) {
-            PHPUnit_TextUI_TestRunner::showError($e->getMessage());
+            $this->showError($e->getMessage());
         }
 
         foreach ($this->options[0] as $option) {
@@ -494,7 +501,7 @@ class PHPUnit_TextUI_Command
                 break;
 
                 case '--version': {
-                    PHPUnit_TextUI_TestRunner::printVersionString();
+                    $this->printVersionString();
                     exit(PHPUnit_TextUI_TestRunner::SUCCESS_EXIT);
                 }
                 break;
@@ -519,11 +526,17 @@ class PHPUnit_TextUI_Command
                 }
                 break;
 
+                case '--disallow-todo-tests': {
+                    $this->arguments['disallowTodoAnnotatedTests'] = true;
+                }
+                break;
+
                 case '--strict': {
-                    $this->arguments['reportUselessTests'] = true;
-                    $this->arguments['strictCoverage']     = true;
-                    $this->arguments['disallowTestOutput'] = true;
-                    $this->arguments['enforceTimeLimit']   = true;
+                    $this->arguments['reportUselessTests']         = true;
+                    $this->arguments['strictCoverage']             = true;
+                    $this->arguments['disallowTestOutput']         = true;
+                    $this->arguments['enforceTimeLimit']           = true;
+                    $this->arguments['disallowTodoAnnotatedTests'] = true;
                 }
                 break;
 
@@ -730,25 +743,21 @@ class PHPUnit_TextUI_Command
 
             if ($class->implementsInterface('PHPUnit_Runner_TestSuiteLoader') &&
                 $class->isInstantiable()) {
-                $loader = $class->newInstance();
+                return $class->newInstance();
             }
         }
 
-        if (!isset($loader)) {
-            if ($loaderClass == 'PHPUnit_Runner_StandardTestSuiteLoader') {
-                return;
-            }
-
-            PHPUnit_TextUI_TestRunner::showError(
-              sprintf(
-                'Could not use "%s" as loader.',
-
-                $loaderClass
-              )
-            );
+        if ($loaderClass == 'PHPUnit_Runner_StandardTestSuiteLoader') {
+            return;
         }
 
-        return $loader;
+        $this->showError(
+          sprintf(
+            'Could not use "%s" as loader.',
+
+            $loaderClass
+          )
+        );
     }
 
     /**
@@ -784,21 +793,17 @@ class PHPUnit_TextUI_Command
                     return $printerClass;
                 }
 
-                $printer = $class->newInstance();
+                return $class->newInstance();
             }
         }
 
-        if (!isset($printer)) {
-            PHPUnit_TextUI_TestRunner::showError(
-              sprintf(
-                'Could not use "%s" as printer.',
+        $this->showError(
+          sprintf(
+            'Could not use "%s" as printer.',
 
-                $printerClass
-              )
-            );
-        }
-
-        return $printer;
+            $printerClass
+          )
+        );
     }
 
     /**
@@ -811,7 +816,7 @@ class PHPUnit_TextUI_Command
         try {
             PHPUnit_Util_Fileloader::checkAndLoad($filename);
         } catch (PHPUnit_Framework_Exception $e) {
-            PHPUnit_TextUI_TestRunner::showError($e->getMessage());
+            $this->showError($e->getMessage());
         }
     }
 
@@ -820,7 +825,7 @@ class PHPUnit_TextUI_Command
      */
     protected function handleSelfUpdate()
     {
-        PHPUnit_TextUI_TestRunner::printVersionString();
+        $this->printVersionString();
 
         if (!extension_loaded('openssl')) {
             print "The OpenSSL extension is not loaded.\n";
@@ -886,7 +891,7 @@ class PHPUnit_TextUI_Command
      */
     protected function showHelp()
     {
-        PHPUnit_TextUI_TestRunner::printVersionString();
+        $this->printVersionString();
 
         print <<<EOT
 Usage: phpunit [options] UnitTest [UnitTest.php]
@@ -926,6 +931,7 @@ Test Execution Options:
   --strict-coverage         Be strict about unintentionally covered code.
   --disallow-test-output    Be strict about output during tests.
   --enforce-time-limit      Enforce time limit based on test size.
+  --disallow-todo-tests     Disallow @todo-annotated tests.
   --strict                  Run tests in strict mode (enables all of the above).
 
   --process-isolation       Run each test in a separate PHP process.
@@ -973,5 +979,27 @@ EOT;
      */
     protected function handleCustomTestSuite()
     {
+    }
+
+    private function printVersionString()
+    {
+        if ($this->versionStringPrinted) {
+            return;
+        }
+
+        print PHPUnit_Runner_Version::getVersionString() . "\n\n";
+
+        $this->versionStringPrinted = true;
+    }
+
+    /**
+     */
+    private function showError($message)
+    {
+        $this->printVersionString();
+
+        print $message . "\n";
+
+        exit(PHPUnit_TextUI_TestRunner::FAILURE_EXIT);
     }
 }

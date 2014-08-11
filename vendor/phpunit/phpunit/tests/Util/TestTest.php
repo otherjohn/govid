@@ -279,6 +279,7 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers       PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers       PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      * @covers       PHPUnit_Util_Test::resolveElementToReflectionObjects
      * @dataProvider getLinesToBeCoveredProvider
      */
@@ -318,6 +319,7 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers            PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers            PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      * @covers            PHPUnit_Util_Test::resolveElementToReflectionObjects
      * @expectedException PHPUnit_Framework_CodeCoverageException
      */
@@ -330,6 +332,7 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers            PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers            PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      * @covers            PHPUnit_Util_Test::resolveElementToReflectionObjects
      * @expectedException PHPUnit_Framework_CodeCoverageException
      */
@@ -342,6 +345,7 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers            PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers            PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      * @covers            PHPUnit_Util_Test::resolveElementToReflectionObjects
      * @expectedException PHPUnit_Framework_CodeCoverageException
      */
@@ -354,6 +358,7 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      */
     public function testGetLinesToBeCoveredSkipsNonExistantMethods()
     {
@@ -367,7 +372,8 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers            PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers            PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      * @expectedException PHPUnit_Framework_CodeCoverageException
      */
     public function testTwoCoversDefaultClassAnnoationsAreNotAllowed()
@@ -380,6 +386,7 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      */
     public function testFunctionParenthesesAreAllowed()
     {
@@ -394,6 +401,7 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      */
     public function testFunctionParenthesesAreAllowedWithWhitespace()
     {
@@ -408,6 +416,7 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      */
     public function testMethodParenthesesAreAllowed()
     {
@@ -422,6 +431,7 @@ class Util_TestTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers PHPUnit_Util_Test::getLinesToBeCovered
+     * @covers PHPUnit_Util_Test::getLinesToBeCoveredOrUsed
      */
     public function testMethodParenthesesAreAllowedWithWhitespace()
     {

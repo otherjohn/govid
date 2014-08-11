@@ -39,7 +39,7 @@ public function keygen($length=40)
         DB::table('oauth_clients')->insert( array(
             array(
                 'id'    => $clients[0],
-                'secret'    => $this->keygen(),
+                'secret'    => "1TdcYRZgaogcvgWI8Fle2FhYezqvHun3G6i2ogul",//$this->keygen(),
                 'name'      => 'Client1',
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
@@ -63,7 +63,7 @@ public function keygen($length=40)
 DB::table('oauth_client_endpoints')->insert( array(
             array(
                 'client_id'    => $clients[0],
-                'redirect_uri' => 'http://gov.nellcorp.com/client1',
+                'redirect_uri' => 'http://govclient.nellcorp.com/user/login',
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ),
@@ -153,7 +153,7 @@ DB::table('oauth_client_metadata')->insert( array(
             array(
                 'client_id'    => $clients[0],
                 'key' => 'website',
-                'value' => 'http://gov.nellcorp.com/client1',
+                'value' => 'http://govclient.nellcorp.com',
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ),

@@ -27,7 +27,7 @@ class OauthController extends BaseController {
     $this->authserver->setRequest(new League\OAuth2\Server\Util\Request($_GET,$_POST,array(),array(),
                                         array('HTTP_AUTHORIZATION' => $_ENV['HTTP_AUTHORIZATION']),
                                         array('Authorization' => $_ENV['HTTP_AUTHORIZATION'])));
-    $this->authserver->setScopeDelimeter($scopeDelimeter = ',');
+    //$this->authserver->setScopeDelimeter($scopeDelimeter = ',');
     $this->authserver->requireStateParam();
     $this->authserver->requireNonceParam();
     $this->authserver->setDefaultScope('openid');
@@ -50,6 +50,7 @@ public function action_index(){
         Session::put('state', $params['state']);
         Session::put('nonce', $params['nonce']);
 
+        //dd($params);
         
         $user = Auth::user();
     
@@ -179,9 +180,10 @@ public function action_authorise()
     //$autoApprove = (isset($params['client_details']['auto_approve']) and ($params['client_details']['auto_approve'] === '1')) ? true : false;
     // Process the authorise request if the user's has clicked 'approve' for the client
     if (Input::get('approve') !== null || $autoApprove === true) {
-
         // Generate an authorization code
         $code = $this->authserver->getGrantType('authorization_code')->newAuthoriseRequest('user', $user->id, $params);
+        Cache::put($code,$params['nonce'],5);
+
 
         // Redirect the user back to the client with an authorization code
         return Redirect::to(
@@ -216,17 +218,27 @@ public function action_access_token()
 {
     
     try {
-
         // Tell the auth server to issue an access token
         //$params = $this->authserver->getGrantType('authorization_code')->checkAuthoriseParams($this->authserver->getRequest()->get());
         $ttl = 3600*24; //Access Token Expires in a day
         $this->authserver->setAccessTokenTTL($ttl);
-        $response = $this->authserver->issueAccessToken($this->authserver->getRequest()->get());
 
+        $code = $this->authserver->getRequest()->post('code');
+        
+        if(!Cache::has($code)){
+            throw new Exception("Invalid Session, please try authorising again");
+        }
+        
+        $response = $this->authserver->issueAccessToken($this->authserver->getRequest()->post());
+
+        
+        
         //Convert ID token to JWT using client secret as key
-        $client_secret = Client::find($this->authserver->getRequest()->get()['client_id'])->secret;
+        $client_secret = Client::where('id',$this->authserver->getRequest()->post()['client_id'])->first()->secret;
+
 
         $response['id_token'] = JWT::encode($response['id_token'], $client_secret);
+
 
     } catch (League\OAuth2\Server\Exception\ClientException $e) {
 
@@ -261,10 +273,11 @@ public function action_check_id(){
 
         $jwt = $this->authserver->getRequest()->get()['access_token'];
 
+
         //Get Token header and payload
         $content = JWT::decode($this->authserver->getRequest()->get()['access_token'], null, false);
         $client_id = DB::table('oauth_client_metadata')->where('key', 'website')->where('value', $content->aud)->first()->client_id;
-        $client_secret = Client::find($client_id)->secret;
+        $client_secret = Client::where('id',$client_id)->first()->secret;
 
         //Verify Signature
         $response = JWT::decode($this->authserver->getRequest()->get()['access_token'], $client_secret);
@@ -305,11 +318,17 @@ public function action_userinfo(){
         //Will throw an exception is token is invalid. No need for IF statement
         $this->resource->isValid();
         if ($this->resource->getOwnerType() != 'user') {
-            throw new ModelNotFoundException("User Not Found");
+            throw new ModelNotFoundException("Only access tokens representing users can use this endpoint");
+        }
+
+        if (!array_key_exists('schema', ($this->resource->getRequest()->get())) or $this->resource->getRequest()->get()['schema'] != 'openid') {
+            throw new Exception("The only defined schema is openid");
         }
 
         $token = $this->resource->getAccessToken();
-        $user = User::findOrFail($this->resource->getOwnerId());
+        $client_url = ClientMetadata::where('client_id',$this->resource->getClientId())->where('key','website')->first()->value;
+        //dd($client_url);
+        $user = User::where('id',$this->resource->getOwnerId())->first();
         //$user = User::findOrFail(10);
         $scopes = $this->resource->getScopes();
         
@@ -327,6 +346,8 @@ public function action_userinfo(){
         }
 
         $response = array();
+
+        //dd(json_encode($scopes));
 
         foreach ($scopes as $scope) {
             if($scope == 'openid'){
@@ -350,6 +371,7 @@ public function action_userinfo(){
                 $response["city"] = $user->city;
                 $response["state"] = $user->state;
                 $response["zip"] = $user->zip;
+                $response["role"] = $user->oauth_role($client_url);
             }
         }
         
@@ -370,7 +392,7 @@ public function action_userinfo(){
     }catch(ModelNotFoundException $e){
         http_response_code(404);
         $response = array(
-            'error' => "User Not Found"
+            'error' => "Resource owner not found"
         );
     }catch (Exception $e) {
 
@@ -390,18 +412,18 @@ public function action_configuration(){
     
     try {
 
-        $response = array(  "issuer" => "http:\/\/gov.nellcorp.com",
-                            "authorization_endpoint" => "http:\/\/gov.nellcorp.com\/oauth",
-                            "token_endpoint" => "http:\/\/gov.nellcorp.com\/oauth\/token",
+        $response = array(  "issuer" => "http://gov.nellcorp.com",
+                            "authorization_endpoint" => "http://gov.nellcorp.com/oauth",
+                            "token_endpoint" => "http://gov.nellcorp.com/token",
                             "token_endpoint_auth_methods_supported" => ["client_secret_post","client_secret_jwt","client_secret_basic"],
                             "token_endpoint_auth_signing_alg_values_supported" => ["HS256","HS512","HS384"],
-                            "userinfo_endpoint" => "http:\/\/gov.nellcorp.com\/oauth\/userinfo",
+                            "userinfo_endpoint" => "http://gov.nellcorp.com/userinfo",
                             "userinfo_signing_alg_values_supported" => ["HS256","HS512","HS384"],
                             "request_parameter_supported" => false,
                             "display_values_supported" => ["page"],
                             "response_types_supported" => ["code"],
-                            "service_documentation" => "http:\/\/gov.nellcorp.com\/docs",
-                            "registration_endpoint" => "http:\/\/gov.nellcorp.com\/oauth\/register",
+                            "service_documentation" => "http://gov.nellcorp.com/docs",
+                            "registration_endpoint" => "http://gov.nellcorp.com/register",
                             "ui_locales_supported" => ["en"],
                             "claim_types_supported" => ["normal"],
                             "grant_types_supported" => ["authorization_code"],
@@ -410,9 +432,9 @@ public function action_configuration(){
                             "subject_types_supported" => ["public"],
                             "response_modes_supported" => ["query","fragment"],
                             "claims_parameter_supported" => true,
-                            "jwks_uri" => "http:\/\/gov.nellcorp.com\/oauth\/jwks",
+                            "jwks_uri" => "http://gov.nellcorp.com/jwks",
                             "scopes_supported" => ["openid","profile","email"],
-                            "claims_supported" => ["sub","iss","auth_time","acr","name","given_name","family_name","address","city","state","zip","email","verified","phone","mobile"],
+                            "claims_supported" => ["sub","iss","auth_time","acr","name","given_name","family_name","address","city","state","zip","email","verified","phone","mobile","role"],
                             "id_token_signing_alg_values_supported" => ["HS256","HS512","HS384"],
                             "require_request_uri_registration" => false);
         

@@ -119,13 +119,16 @@ Route::get('authorise', function(){return View::make('site/oauth/authorise');});
 Route::post('do_authorise', 'OauthController@action_authorise');
 
 //:: Get Access token ::
-Route::get('token', 'OauthController@action_access_token');
+Route::post('token', 'OauthController@action_access_token');
 
 //:: Verify ID Token ::
 Route::get('check', 'OauthController@action_check_id');
 
 //:: UserInfo Endpoint ::
 Route::get('userinfo', 'OauthController@action_userinfo');
+
+//:: UserInfo Endpoint ::
+Route::get('register', 'OauthController@action_register');
 
 //:: Provider Configuration Endpoint ::
 Route::get('.well-known/openid-configuration', 'OauthController@action_configuration');

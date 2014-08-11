@@ -20,13 +20,14 @@ public function keygen($length=40)
 
     public function run()
     {
+        DB::table('oauth_user_roles')->delete();
         DB::table('users')->delete();
-
+        $pids = array($this->keygen(20), $this->keygen(20),$this->keygen(20));
 
         $users = array(
             array(
                 'username'      => 'admin@example.org',
-                'pid'      => $this->keygen(20),
+                'pid'      => $pids[0],
                 'first_name'      => 'John',
                 'last_name'      => 'Doe',
                 'email'      => 'admin@example.org',
@@ -43,8 +44,26 @@ public function keygen($length=40)
                 'updated_at' => new DateTime,
             ),
             array(
+                'username'      => 'house@example.org',
+                'pid'      => $pids[1],
+                'first_name'      => 'Gregory',
+                'last_name'      => 'House',
+                'email'      => 'house@example.org',
+                'password'   => Hash::make('house'),
+                'street'      => '1 Lomb Memorial Drive',
+                'city'      => 'Rochester',
+                'state'      => 'New York',
+                'zip'      => '14623',
+                'phone'      => '555-555-5555',
+                'mobile'      => '123-456-7890',
+                'confirmed'   => 1,
+                'confirmation_code' => md5(microtime().Config::get('app.key')),
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
                 'username'      => 'user@example.org',
-                'pid'      => $this->keygen(20),
+                'pid'      => $pids[2],
                 'first_name'      => 'Jane',
                 'last_name'      => 'Doe',
                 'email'      => 'user@example.org',
@@ -63,6 +82,29 @@ public function keygen($length=40)
         );
 
         DB::table('users')->insert( $users );
+
+        DB::table('oauth_user_roles')->insert( array(
+            array(
+                'user_id'    => DB::table('users')->where('pid', $pids[0])->first()->id,
+                'client_id' => 'http://govclient.nellcorp.com',
+                'role' => 'admin',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'user_id'    => DB::table('users')->where('pid', $pids[1])->first()->id,
+                'client_id' => 'http://govclient.nellcorp.com',
+                'role' => 'doctor',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            ),
+            array(
+                'user_id'    => DB::table('users')->where('pid', $pids[2])->first()->id,
+                'client_id' => 'http://govclient.nellcorp.com',
+                'role' => 'patient',
+                'created_at' => new DateTime,
+                'updated_at' => new DateTime,
+            )));
     }
 
 }

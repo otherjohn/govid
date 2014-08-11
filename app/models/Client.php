@@ -151,8 +151,9 @@ public function getClient($clientId, $clientSecret = null, $redirectUri = null, 
         }
 
 
-
+        //dd($redirectUri);
         $result = $query->first();
+        //dd($result);
         
         if (is_null($result)) {
             return false;

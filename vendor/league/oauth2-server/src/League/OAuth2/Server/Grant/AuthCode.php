@@ -77,7 +77,6 @@ class AuthCode implements GrantTypeInterface {
     {
 
 
-
         // Auth params
         $authParams = $this->authServer->getParam(array('client_id', 'redirect_uri', 'response_type', 'scope', 'state', 'nonce'), 'get', $inputParams);
 
@@ -122,6 +121,8 @@ class AuthCode implements GrantTypeInterface {
 
         // Validate scopes
         $scopes = explode($this->authServer->getScopeDelimeter(), $authParams['scope']);
+
+        //dd($scopes);
 
         for ($i = 0; $i < count($scopes); $i++) {
             $scopes[$i] = trim($scopes[$i]);
@@ -176,6 +177,8 @@ class AuthCode implements GrantTypeInterface {
 
         // Associate the auth code
         $authCodeId = $this->authServer->getStorage('session')->associateAuthCode($sessionId, $authCode, time() + $this->authTokenTTL);
+        
+        //dd($authParams['scopes']);
         // Associate the scopes to the auth code
         foreach ($authParams['scopes'] as $scope) {
             $this->authServer->getStorage('session')->associateAuthCodeScope($authCodeId, $scope['id']);
@@ -191,6 +194,8 @@ class AuthCode implements GrantTypeInterface {
      */
     public function completeFlow($inputParams = null)
     {
+
+
         // Get the required params
         $authParams = $this->authServer->getParam(array('client_id', 'client_secret', 'redirect_uri', 'code'), 'post', $inputParams);
 
@@ -209,7 +214,6 @@ class AuthCode implements GrantTypeInterface {
         // Validate client ID and redirect URI
         $clientDetails = $this->authServer->getStorage('client')->getClient($authParams['client_id'], $authParams['client_secret'], $authParams['redirect_uri'], $this->identifier);
 
-
         if ($clientDetails === false) {
             throw new Exception\ClientException($this->authServer->getExceptionMessage('invalid_client'), 8);
         }
@@ -222,6 +226,7 @@ class AuthCode implements GrantTypeInterface {
 
         // Verify the authorization code matches the client_id and the request_uri
         $authCodeDetails = $this->authServer->getStorage('session')->validateAuthCode($authParams['client_id'], $authParams['redirect_uri'], $authParams['code']);
+        //dd($authCodeDetails);
 
         if ( ! $authCodeDetails) {
             throw new Exception\ClientException(sprintf($this->authServer->getExceptionMessage('invalid_grant'), 'code'), 9);
@@ -229,6 +234,8 @@ class AuthCode implements GrantTypeInterface {
 
         // Get any associated scopes
         $scopes = $this->authServer->getStorage('session')->getAuthCodeScopes($authCodeDetails['authcode_id']);
+
+        //dd($scopes);
 
         // A session ID was returned so update it with an access token and remove the authorisation code
         $accessToken = SecureKey::make();
@@ -251,17 +258,19 @@ class AuthCode implements GrantTypeInterface {
         nonce:
         */
         //Create ID Token here, for OpenID Connect
+
         $id_token = array(
             "iss" => \Config::get('app.url'),
-            "sub" => \User::find($this->authServer->getStorage('session')->validateAccessToken($accessToken)['owner_id'])->pid,
+            "sub" => \User::where('id',$this->authServer->getStorage('session')->validateAccessToken($accessToken)['owner_id'])->first()->pid,
             "aud" => $clientDetails['metadata']['website'],
             "iat" => time(),
             "exp" => $accessTokenExpires,
             "acr" => 0,
-            "nonce" => \Session::get('nonce')
+            "nonce" => \Cache::get($authParams['code'])
         );
         
-
+        \Cache::forget($authParams['code']);
+        
         // Associate scopes with the access token
         if (count($scopes) > 0) {
             foreach ($scopes as $scope) {

@@ -83,9 +83,7 @@ class PHPUnit_Runner_Filter_Test extends RecursiveFilterIterator
      */
     protected function setFilter($filter)
     {
-        if ($filter[0] != substr($filter, -1) ||
-            preg_match('/^[a-zA-Z0-9_]/', $filter)) {
-
+        if (PHPUnit_Util_Regex::pregMatchSafe($filter, '') === false) {
             // Handles:
             //  * testAssertEqualsSucceeds#4
             //  * testAssertEqualsSucceeds#4-8
