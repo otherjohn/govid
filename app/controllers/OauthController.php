@@ -220,7 +220,8 @@ public function action_access_token()
     try {
         // Tell the auth server to issue an access token
         //$params = $this->authserver->getGrantType('authorization_code')->checkAuthoriseParams($this->authserver->getRequest()->get());
-        $ttl = 3600*24; //Access Token Expires in a day
+        //$ttl = 3600*24; //Access Token Expires in a day
+        $ttl = 120; //Access Token Expires in a day
         $this->authserver->setAccessTokenTTL($ttl);
 
         $code = $this->authserver->getRequest()->post('code');

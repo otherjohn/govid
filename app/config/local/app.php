@@ -27,7 +27,6 @@ return array(
 	*/
 
 	'url' => 'http://gov.nellcorp.com',
-
 	/*
 	|--------------------------------------------------------------------------
 	| Application Timezone

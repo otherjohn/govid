@@ -63,7 +63,7 @@ public function keygen($length=40)
 DB::table('oauth_client_endpoints')->insert( array(
             array(
                 'client_id'    => $clients[0],
-                'redirect_uri' => 'http://govclient.nellcorp.com/user/login',
+                'redirect_uri' => 'http://govclient.nellcorp.com/login',
                 'created_at' => new DateTime,
                 'updated_at' => new DateTime,
             ),
